@@ -1,2 +1,2 @@
 # Copulas-and-Risk-Management-
-generate the CvaR and VaR for currency risks using Copulas 
+generate a CvaR and/or a VaR to estimate currency risks using copulas. 
