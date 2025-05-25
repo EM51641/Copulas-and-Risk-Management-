@@ -11,10 +11,10 @@ ctypedef cnp.float64_t DTYPE_t
 @cython.wraparound(False)
 cdef class StudentTCopula:
     cdef:
-        cnp.ndarray initial_weights
-        cnp.ndarray returns
-        int size
-        int df
+        public cnp.ndarray initial_weights
+        public cnp.ndarray returns
+        public int size
+        public int df
         public double var
         public double cvar
         public double alpha
@@ -24,6 +24,14 @@ cdef class StudentTCopula:
                  int size=10000,
                  int df=4,
                  double alpha=0.01):
+
+        assert initial_weights.ndim == 1, "initial_weights must be a 1D array"
+        assert returns.ndim == 2, "returns must be a 2D array"
+        assert initial_weights.shape[0] == returns.shape[1], "initial_weights and returns must have the same number of assets"
+        assert size > 0, "size must be greater than 0"
+        assert alpha > 0 and alpha < 1, "alpha must be between 0 and 1"
+        assert df > 2, "degrees of freedom must be greater than 2"
+
         self.initial_weights = np.ascontiguousarray(initial_weights, dtype=np.float64)
         self.returns = np.ascontiguousarray(returns, dtype=np.float64)
         self.size = size

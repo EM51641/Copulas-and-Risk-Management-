@@ -7,13 +7,11 @@ from scipy.stats import norm
 
 ctypedef cnp.float64_t DTYPE_t
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
 cdef class GaussianCopula:
     cdef:
-        cnp.ndarray initial_weights
-        cnp.ndarray returns
-        int size
+        public cnp.ndarray initial_weights
+        public cnp.ndarray returns
+        public int size
         public double var
         public double cvar
         public double alpha
@@ -22,6 +20,13 @@ cdef class GaussianCopula:
                  cnp.ndarray[DTYPE_t, ndim=2] returns, 
                  int size=10000,
                  double alpha=0.01):
+
+        assert initial_weights.ndim == 1, "initial_weights must be a 1D array"
+        assert returns.ndim == 2, "returns must be a 2D array"
+        assert initial_weights.shape[0] == returns.shape[1], "initial_weights and returns must have the same number of assets"
+        assert size > 0, "size must be greater than 0"
+        assert alpha > 0 and alpha < 1, "alpha must be between 0 and 1"
+
         self.initial_weights = np.ascontiguousarray(initial_weights, dtype=np.float64)
         self.returns = np.ascontiguousarray(returns, dtype=np.float64)
         self.size = size
@@ -78,8 +83,6 @@ cdef class GaussianCopula:
         self.var = np.quantile(negative_returns, self.alpha)
         self.cvar = negative_returns[negative_returns <= self.var].mean()
 
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
     cdef cnp.ndarray[DTYPE_t, ndim=1] _empirical_quantile(self, 
                                                          cnp.ndarray[DTYPE_t, ndim=1] data, 
                                                          cnp.ndarray[DTYPE_t, ndim=1] quantiles):
