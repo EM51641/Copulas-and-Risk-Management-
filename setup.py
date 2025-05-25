@@ -5,7 +5,7 @@ from setuptools import setup  # type: ignore
 setup(
     name="copula",
     ext_modules=cythonize(
-        ["copula/models/normal/gauss.pyx", "copula/models/student/student.pyx"],
+        ["copula/models/normal/gaussian.pyx", "copula/models/student/student.pyx"],
         compiler_directives={
             "language_level": "3",
             "boundscheck": False,
@@ -17,8 +17,3 @@ setup(
     ),
     include_dirs=[np.get_include()],
 )
-
-# wfssfsfdgsfsf
-
-
-###sdssfsfsfsdg

@@ -1,5 +1,3 @@
-from typing import Any
-
 import numpy as np
 from numpy.typing import NDArray
 
@@ -19,6 +17,3 @@ class GaussianCopula:
         alpha: float = 0.01,
     ) -> None: ...
     def fit(self) -> None: ...
-    def _empirical_quantile(
-        self, data: NDArray[np.float64], quantiles: NDArray[np.float64]
-    ) -> NDArray[np.float64]: ...

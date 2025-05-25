@@ -7,8 +7,6 @@ from scipy.stats import t as student_t
 
 ctypedef cnp.float64_t DTYPE_t
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
 cdef class StudentTCopula:
     cdef:
         public cnp.ndarray initial_weights
@@ -91,8 +89,6 @@ cdef class StudentTCopula:
         self.var = np.quantile(negative_returns, self.alpha)
         self.cvar = negative_returns[negative_returns <= self.var].mean()
 
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
     cdef cnp.ndarray[DTYPE_t, ndim=1] _empirical_quantile(self, 
                                                          cnp.ndarray[DTYPE_t, ndim=1] data, 
                                                          cnp.ndarray[DTYPE_t, ndim=1] quantiles):

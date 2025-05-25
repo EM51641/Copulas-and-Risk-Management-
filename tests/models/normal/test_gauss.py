@@ -1,8 +1,7 @@
 import numpy as np
 import pytest
-from scipy.stats import norm
 
-from copula.models.normal.gauss import GaussianCopula
+from copula.models.normal.gaussian import GaussianCopula
 
 
 @pytest.fixture
