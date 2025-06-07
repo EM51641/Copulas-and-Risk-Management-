@@ -21,11 +21,9 @@ def sample_data():
 
 def test_initialization(sample_data):
     returns, weights = sample_data
-    copula = GaussianCopula(
-        initial_weights=weights, returns=returns, size=10000, alpha=0.01
-    )
+    copula = GaussianCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
 
-    assert copula.initial_weights.shape == weights.shape
+    assert copula.weights.shape == weights.shape
     assert copula.returns.shape == returns.shape
     assert copula.size == 10000
     assert copula.alpha == 0.01
@@ -35,9 +33,7 @@ def test_initialization(sample_data):
 
 def test_fit(sample_data):
     returns, weights = sample_data
-    copula = GaussianCopula(
-        initial_weights=weights, returns=returns, size=10000, alpha=0.01
-    )
+    copula = GaussianCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
 
     copula.fit()
 
@@ -59,7 +55,7 @@ def test_different_alpha_values(sample_data):
 
     for alpha in alpha_values:
         copula = GaussianCopula(
-            initial_weights=weights, returns=returns, size=10000, alpha=alpha
+            weights=weights, returns=returns, size=10000, alpha=alpha
         )
         copula.fit()
         var_results.append(copula.var)
@@ -77,7 +73,7 @@ def test_input_validation(sample_data):
     # Test invalid weights shape
     with pytest.raises(AssertionError):
         GaussianCopula(
-            initial_weights=np.array([0.5, 0.5]),  # Wrong number of weights
+            weights=np.array([0.5, 0.5]),  # Wrong number of weights
             returns=returns,
             size=10000,
         )
@@ -85,7 +81,7 @@ def test_input_validation(sample_data):
     # Test invalid returns shape
     with pytest.raises(AssertionError):
         GaussianCopula(
-            initial_weights=weights,
+            weights=weights,
             returns=returns[:, :2],  # Wrong number of assets
             size=10000,
         )
@@ -93,7 +89,7 @@ def test_input_validation(sample_data):
     # Test invalid weights shape
     with pytest.raises(AssertionError):
         GaussianCopula(
-            initial_weights=weights[:2],  # Use only 2 weights for 3 assets
+            weights=weights[:2],  # Use only 2 weights for 3 assets
             returns=returns,
             size=10000,
         )
@@ -101,8 +97,17 @@ def test_input_validation(sample_data):
     # Test invalid alpha value
     with pytest.raises(AssertionError):
         GaussianCopula(
-            initial_weights=weights,
+            weights=weights,
             returns=returns,
             size=10000,
             alpha=1.01,
         )
+
+
+def test_str_and_repr(sample_data):
+    returns, weights = sample_data
+    copula = GaussianCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
+    copula.fit()
+
+    assert str(copula) == f"GaussianCopula(size=10000, alpha=0.01)"
+    assert repr(copula) == f"GaussianCopula(size=10000, alpha=0.01)"

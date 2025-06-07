@@ -241,6 +241,7 @@ dependencies = [
     { name = "numpy" },
     { name = "pandas-datareader" },
     { name = "pytest", extra = ["dev"] },
+    { name = "pyvinecopulib" },
     { name = "scipy" },
     { name = "seaborn" },
     { name = "setuptools" },
@@ -254,6 +255,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.2.6" },
     { name = "pandas-datareader", specifier = ">=0.10.0" },
     { name = "pytest", extras = ["dev"], specifier = ">=8.3.5" },
+    { name = "pyvinecopulib", specifier = ">=0.7.3" },
     { name = "scipy", specifier = ">=1.15.3" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "setuptools", specifier = ">=80.8.0" },
@@ -721,6 +723,15 @@ wheels = [
 ]
 
 [[package]]
+name = "networkx"
+version = "3.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/4f/ccdb8ad3a38e583f214547fd2f7ff1fc160c43a75af88e6aec213404b96a/networkx-3.5.tar.gz", hash = "sha256:d4c6f9cf81f52d69230866796b82afbccdec3db7ae4fbd1b65ea750feed50037", size = 2471065 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/8d/776adee7bbf76365fdd7f2552710282c79a4ead5d2a46408c9043a2b70ba/networkx-3.5-py3-none-any.whl", hash = "sha256:0030d386a9a06dee3565298b4a734b68589749a544acbb6c412dc9e2489ec6ec", size = 2034406 },
+]
+
+[[package]]
 name = "numpy"
 version = "2.2.6"
 source = { registry = "https://pypi.org/simple" }
@@ -1005,6 +1016,18 @@ wheels = [
 ]
 
 [[package]]
+name = "pydot"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyparsing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d1/c3/6034ed1ebf2e3ba95a0e35fa7c43104e40444c0ed2b5325702c63e824dbf/pydot-4.0.0.tar.gz", hash = "sha256:12f16493337cade2f7631b87c8ccd299ba2e251f3ee5d0732a058df2887afe97", size = 161793 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0a/16/984c0cf5073a23154b1f95c9d131b14c9fea83bfadae4ba8fc169daded11/pydot-4.0.0-py3-none-any.whl", hash = "sha256:cf86e13a6cfe2a96758a9702537f77e0ac1368db8ef277b4d3b34473ea425c97", size = 37535 },
+]
+
+[[package]]
 name = "pygments"
 version = "2.19.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1068,6 +1091,28 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3", size = 320884 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00", size = 509225 },
+]
+
+[[package]]
+name = "pyvinecopulib"
+version = "0.7.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "networkx" },
+    { name = "numpy" },
+    { name = "pydot" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/54/9f/9e50bf05c8115dd567f758d289e3adffbd7ae95a0a3a25d7944dbfee9cc3/pyvinecopulib-0.7.3.tar.gz", hash = "sha256:2697eea43435492f00172dd9d51a757c72127ae13b13023319737e0e08679cd7", size = 1550449 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/76/461c0bd35a89b3f169df76ebc8d1ea07ee61584a2147dfea787cdc34c26c/pyvinecopulib-0.7.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7afe9efd3f409a0f87e49fc3bb63eba01895f2df0c181d8f24c93104951dbe5f", size = 1404765 },
+    { url = "https://files.pythonhosted.org/packages/28/a6/893e79c5bff1d7818f887f724cbc2dc458d5e515b33266a7ea8fff4aba80/pyvinecopulib-0.7.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:58d7250d66b0959e2600d5bb15f09fce3b75711c6f84eba71f9a13615d839b1c", size = 1561715 },
+    { url = "https://files.pythonhosted.org/packages/92/99/81db642328f9b9005d51f17906caa22443eb74227856a73baccd2a578633/pyvinecopulib-0.7.3-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:1e8cb5127c6d7074d9e85b6432d6fe86178954b93cdd826b9c11c8d33da4f1d2", size = 2006786 },
+    { url = "https://files.pythonhosted.org/packages/ba/6d/f5d78c17a38dec134f0ede68424438cd84459bfd534c69b44c9f020f7a64/pyvinecopulib-0.7.3-cp311-cp311-win_amd64.whl", hash = "sha256:f30b8cb3c0bee5e008d6ecf52ffe49602d4b713d812ad4ae5da61ef1e244181f", size = 1381445 },
+    { url = "https://files.pythonhosted.org/packages/4d/08/95bec81fd98711379a09b443664208ec0ff3e0d2fcf4a43a89cb7aaf6a54/pyvinecopulib-0.7.3-cp312-abi3-macosx_11_0_arm64.whl", hash = "sha256:b7ceb3030ae707d34eba594e73bfb862337f98aacab25e96613b2afbbe60c742", size = 1403550 },
+    { url = "https://files.pythonhosted.org/packages/04/70/3a646ad3ec651d6cb49f12b14bf8d8d303ef1c2b0014736a59ea7175d722/pyvinecopulib-0.7.3-cp312-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b80d7b8e68db31c26d3d487d738f02d99a20eddfe54a794ae24a67b6e8085d24", size = 1551361 },
+    { url = "https://files.pythonhosted.org/packages/d8/2a/3d0a2fa011530e9e010ee29f321fb3f440cd4b588d209d28ba0b5250bfd0/pyvinecopulib-0.7.3-cp312-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:61f5b5ee8369eef607d8312c78e04c2371e2a93ec4b1b52c42af1d6363bb3617", size = 1998812 },
+    { url = "https://files.pythonhosted.org/packages/12/d6/72de41ab2cef7f300579bb66c18668c1741242e32fc964d60d6fcd723729/pyvinecopulib-0.7.3-cp312-abi3-win_amd64.whl", hash = "sha256:b83e89c89788e419b295343ea85572d159138f2df9c315c1ba00f23d8a9be5e1", size = 1379368 },
 ]
 
 [[package]]

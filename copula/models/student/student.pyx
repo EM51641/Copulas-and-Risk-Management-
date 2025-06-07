@@ -9,7 +9,7 @@ ctypedef cnp.float64_t DTYPE_t
 
 cdef class StudentTCopula:
     cdef:
-        public cnp.ndarray initial_weights
+        public cnp.ndarray weights
         public cnp.ndarray returns
         public int size
         public int df
@@ -17,20 +17,20 @@ cdef class StudentTCopula:
         public double cvar
         public double alpha
     
-    def __init__(self, cnp.ndarray[DTYPE_t, ndim=1] initial_weights, 
+    def __init__(self, cnp.ndarray[DTYPE_t, ndim=1] weights, 
                  cnp.ndarray[DTYPE_t, ndim=2] returns, 
                  int size=10000,
                  int df=4,
                  double alpha=0.01):
 
-        assert initial_weights.ndim == 1, "initial_weights must be a 1D array"
+        assert weights.ndim == 1, "weights must be a 1D array"
         assert returns.ndim == 2, "returns must be a 2D array"
-        assert initial_weights.shape[0] == returns.shape[1], "initial_weights and returns must have the same number of assets"
+        assert weights.shape[0] == returns.shape[1], "weights and returns must have the same number of assets"
         assert size > 0, "size must be greater than 0"
         assert alpha > 0 and alpha < 1, "alpha must be between 0 and 1"
         assert df > 2, "degrees of freedom must be greater than 2"
 
-        self.initial_weights = np.ascontiguousarray(initial_weights, dtype=np.float64)
+        self.weights = np.ascontiguousarray(weights, dtype=np.float64)
         self.returns = np.ascontiguousarray(returns, dtype=np.float64)
         self.size = size
         self.df = df
@@ -67,17 +67,14 @@ cdef class StudentTCopula:
         
         # Transform to uniform using t CDF
         U = student_t.cdf(X, self.df)
-        
-        # Inverse transform using empirical quantiles
-        U_scaled = np.empty_like(U)
+
+        # Pre-sort returns for each asset
+        U_scaled = np.empty((self.size, n_assets))
         for i in range(n_assets):
-            U_scaled[:, i] = self._empirical_quantile(
-                self.returns[:, i], 
-                U[:, i]
-            )
+            U_scaled[:, i] = np.quantile(self.returns[:, i], U[:, i])
 
         # Calculate portfolio returns
-        portfolio_returns = U_scaled.dot(self.initial_weights)
+        portfolio_returns = U_scaled.dot(self.weights)
         
         # Calculate risk metrics
         negative_returns = portfolio_returns[portfolio_returns < 0]
@@ -89,16 +86,8 @@ cdef class StudentTCopula:
         self.var = np.quantile(negative_returns, self.alpha)
         self.cvar = negative_returns[negative_returns <= self.var].mean()
 
-    cdef cnp.ndarray[DTYPE_t, ndim=1] _empirical_quantile(self, 
-                                                         cnp.ndarray[DTYPE_t, ndim=1] data, 
-                                                         cnp.ndarray[DTYPE_t, ndim=1] quantiles):
-        cdef:
-            cnp.ndarray[DTYPE_t, ndim=1] sorted_data = np.sort(data)
-            cnp.ndarray[DTYPE_t, ndim=1] result = np.empty_like(quantiles)
-            int n = data.shape[0]
-            int idx
+    def __str__(self) -> str:
+        return f"StudentTCopula(size={self.size}, alpha={self.alpha}, df={self.df})"
 
-        for i in range(quantiles.shape[0]):
-            idx = min(int(quantiles[i] * n), n-1)
-            result[i] = sorted_data[idx]
-        return result
+    def __repr__(self) -> str:
+        return f"StudentTCopula(size={self.size}, alpha={self.alpha}, df={self.df})"

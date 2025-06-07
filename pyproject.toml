@@ -10,6 +10,7 @@ dependencies = [
     "numpy>=2.2.6",
     "pandas-datareader>=0.10.0",
     "pytest[dev]>=8.3.5",
+    "pyvinecopulib>=0.7.3",
     "scipy>=1.15.3",
     "seaborn>=0.13.2",
     "setuptools>=80.8.0",

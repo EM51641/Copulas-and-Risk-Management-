@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from copula.models.student.student import StudentTCopula
+from copula.models.clayton.clayton import ClaytonCopula
 
 
 @pytest.fixture
@@ -21,14 +21,11 @@ def sample_data():
 
 def test_initialization(sample_data):
     returns, weights = sample_data
-    copula = StudentTCopula(
-        weights=weights, returns=returns, size=10000, df=4, alpha=0.01
-    )
+    copula = ClaytonCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
 
     assert copula.weights.shape == weights.shape
     assert copula.returns.shape == returns.shape
     assert copula.size == 10000
-    assert copula.df == 4
     assert copula.alpha == 0.01
     assert copula.var == 0.0  # Initial value
     assert copula.cvar == 0.0  # Initial value
@@ -36,9 +33,7 @@ def test_initialization(sample_data):
 
 def test_fit(sample_data):
     returns, weights = sample_data
-    copula = StudentTCopula(
-        weights=weights, returns=returns, size=10000, df=4, alpha=0.01
-    )
+    copula = ClaytonCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
 
     copula.fit()
 
@@ -52,25 +47,6 @@ def test_fit(sample_data):
     assert copula.cvar < 0
 
 
-def test_different_degrees_of_freedom(sample_data):
-    returns, weights = sample_data
-    df_values = [3, 4, 5, 10]
-    var_results = []
-    cvar_results = []
-
-    for df in df_values:
-        copula = StudentTCopula(
-            weights=weights, returns=returns, size=10000, df=df, alpha=0.01
-        )
-        copula.fit()
-        var_results.append(copula.var)
-        cvar_results.append(copula.cvar)
-
-    # Check that results are different for different df values
-    assert len(set(var_results)) == len(df_values)
-    assert len(set(cvar_results)) == len(df_values)
-
-
 def test_different_alpha_values(sample_data):
     returns, weights = sample_data
     alpha_values = [0.01, 0.05, 0.1]
@@ -78,8 +54,8 @@ def test_different_alpha_values(sample_data):
     cvar_results = []
 
     for alpha in alpha_values:
-        copula = StudentTCopula(
-            weights=weights, returns=returns, size=10000, df=4, alpha=alpha
+        copula = ClaytonCopula(
+            weights=weights, returns=returns, size=10000, alpha=alpha
         )
         copula.fit()
         var_results.append(copula.var)
@@ -96,44 +72,34 @@ def test_input_validation(sample_data):
 
     # Test invalid weights shape
     with pytest.raises(AssertionError):
-        StudentTCopula(
+        ClaytonCopula(
             weights=np.array([0.5, 0.5]),  # Wrong number of weights
             returns=returns,
             size=10000,
-            df=4,
         )
 
     # Test invalid returns shape
     with pytest.raises(AssertionError):
-        StudentTCopula(
+        ClaytonCopula(
             weights=weights,
             returns=returns[:, :2],  # Wrong number of assets
             size=10000,
-            df=4,
-        )
-
-    # Test invalid df value
-    with pytest.raises(AssertionError):
-        StudentTCopula(
-            weights=weights, returns=returns, size=10000, df=1  # df must be > 2
         )
 
     # Test invalid alpha value
     with pytest.raises(AssertionError):
-        StudentTCopula(
+        ClaytonCopula(
             weights=weights,
             returns=returns,
             size=10000,
-            alpha=0.0,
+            alpha=1.01,  # alpha must be between 0 and 1
         )
 
 
 def test_str_and_repr(sample_data):
     returns, weights = sample_data
-    copula = StudentTCopula(
-        weights=weights, returns=returns, size=10000, df=4, alpha=0.01
-    )
+    copula = ClaytonCopula(weights=weights, returns=returns, size=10000, alpha=0.01)
     copula.fit()
 
-    assert str(copula) == f"StudentTCopula(size=10000, alpha=0.01, df=4)"
-    assert repr(copula) == f"StudentTCopula(size=10000, alpha=0.01, df=4)"
+    assert str(copula) == f"ClaytonCopula(size=10000, alpha=0.01)"
+    assert repr(copula) == f"ClaytonCopula(size=10000, alpha=0.01)"

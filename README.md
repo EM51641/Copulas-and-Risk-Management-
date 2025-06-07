@@ -1,30 +1,50 @@
 # Copulas and Risk Management
 
-A Python library for modeling financial risk using copula-based approaches. This library implements various copula models for portfolio risk assessment, with a focus on Value at Risk (VaR) and Conditional Value at Risk (CVaR) calculations.
+A high-performance Python library for modeling financial risk using copula-based approaches. This library implements various copula models for portfolio risk assessment, with a focus on Value at Risk (VaR) and Conditional Value at Risk (CVaR) calculations.
 
 ## Features
 
-- Implementation of different copula models:
+- **Multiple Copula Models**:
   - Gaussian Copula
   - Student's t Copula
-- Risk metrics calculation:
+  - Clayton Copula
+- **High-Performance Implementation**:
+  - Cython-optimized core computations
+  - Efficient memory management
+  - Type-safe operations
+- **Risk Metrics**:
   - Value at Risk (VaR)
   - Conditional Value at Risk (CVaR)
-- High-performance implementation using Cython
-- Comprehensive test suite
+  - Customizable confidence levels
+- **Comprehensive Testing**:
+  - Unit tests for all models
+  - Input validation
 
 ## Installation
 
 ```bash
-uv pip install .
+# Clone the repository
+git clone https://github.com/EM51641/Copulas-and-Risk-Management-.git
+cd Copulas-and-Risk-Management-
+
+# Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install the package in development mode
+pip install -e .
+
+# Or install with all development dependencies
+pip install -e ".[dev]"
 ```
 
-## Usage
+## Quick Start
 
 ```python
 import numpy as np
 from copula.models.normal.gaussian import GaussianCopula
 from copula.models.student.student import StudentTCopula
+from copula.models.clayton.clayton import ClaytonCopula
 
 # Generate sample returns data
 n_assets = 3
@@ -40,7 +60,7 @@ weights = np.array([0.4, 0.3, 0.3])
 
 # Gaussian Copula
 gaussian_copula = GaussianCopula(
-    initial_weights=weights,
+    weights=weights,
     returns=returns,
     size=10000,
     alpha=0.01
@@ -51,7 +71,7 @@ print(f"Gaussian CVaR: {gaussian_copula.cvar}")
 
 # Student's t Copula
 student_copula = StudentTCopula(
-    initial_weights=weights,
+    weights=weights,
     returns=returns,
     size=10000,
     df=4,
@@ -60,48 +80,37 @@ student_copula = StudentTCopula(
 student_copula.fit()
 print(f"Student's t VaR: {student_copula.var}")
 print(f"Student's t CVaR: {student_copula.cvar}")
+
+# Clayton Copula
+clayton_copula = ClaytonCopula(
+    weights=weights,
+    returns=returns,
+    size=10000,
+    alpha=0.01
+)
+clayton_copula.fit()
+print(f"Clayton VaR: {clayton_copula.var}")
+print(f"Clayton CVaR: {clayton_copula.cvar}")
 ```
 
-## Project Structure
+## Key Features of Each Copula
 
-```
-copula/
-├── models/
-│   ├── normal/
-│   │   ├── gaussian.pyx    # Gaussian Copula implementation
-│   │   └── gaussian.pyi    # Type hints for Gaussian Copula
-│   └── student/
-│       ├── student.pyx     # Student's t Copula implementation
-│       └── student.pyi     # Type hints for Student's t Copula
-└── tests/
-    └── models/
-        ├── normal/
-        │   └── test_gauss.py    # Tests for Gaussian Copula
-        └── student/
-            └── test_student.py  # Tests for Student's t Copula
-```
+### Gaussian Copula
+- Symmetric tail dependence
+- Based on multivariate normal distribution
+- Suitable for moderate dependence structures
 
-## Development
+### Student's t Copula
+- Heavy tails
+- Symmetric tail dependence
+- Controlled by degrees of freedom parameter
+- Better for extreme events
 
-### Requirements
-
-- Python 3.8+
-- NumPy
-- SciPy
-- Cython
-- pytest (for testing)
-
-### Running Tests
-
-```bash
-pytest tests/
-```
-
-### Building Cython Extensions
-
-```bash
-python setup.py build_ext --inplace
-```
+### Clayton Copula
+- Asymmetric tail dependence
+- Strong lower tail dependence
+- Upper tail independence
+- Good for modeling joint extreme losses
 
 ## Contributing
 
@@ -114,3 +123,14 @@ python setup.py build_ext --inplace
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Disclaimer
+
+**IMPORTANT: This software is for educational and research purposes only. It is not intended to provide investment advice.**
+
+- This library is provided "as is" without any warranties
+- The authors are not responsible for any financial losses or damages
+- Users should consult with qualified financial professionals before making any investment decisions
+- The risk models implemented are simplified versions of real-world scenarios
+- Past performance is not indicative of future results
+- All investment decisions should be made at the user's own risk
